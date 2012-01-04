@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontConventer", "FontConventer\FontConventer.csproj", "{61A5A63F-CED4-4F7B-8CD9-556DF456C1DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontWrapper", "FontWrapper\FontWrapper.csproj", "{BCB064E5-0FDF-49B6-8594-0B7D89085193}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61A5A63F-CED4-4F7B-8CD9-556DF456C1DC}.Debug|x86.ActiveCfg = Debug|x86
+		{61A5A63F-CED4-4F7B-8CD9-556DF456C1DC}.Debug|x86.Build.0 = Debug|x86
+		{61A5A63F-CED4-4F7B-8CD9-556DF456C1DC}.Release|x86.ActiveCfg = Release|x86
+		{61A5A63F-CED4-4F7B-8CD9-556DF456C1DC}.Release|x86.Build.0 = Release|x86
+		{BCB064E5-0FDF-49B6-8594-0B7D89085193}.Debug|x86.ActiveCfg = Debug|x86
+		{BCB064E5-0FDF-49B6-8594-0B7D89085193}.Debug|x86.Build.0 = Debug|x86
+		{BCB064E5-0FDF-49B6-8594-0B7D89085193}.Release|x86.ActiveCfg = Release|x86
+		{BCB064E5-0FDF-49B6-8594-0B7D89085193}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
