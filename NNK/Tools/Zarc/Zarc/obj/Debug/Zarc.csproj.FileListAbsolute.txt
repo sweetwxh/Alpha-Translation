@@ -1,0 +1,5 @@
+D:\Translate\EZG\code\Zarc\Zarc\bin\Debug\Zarc.exe
+D:\Translate\EZG\code\Zarc\Zarc\bin\Debug\Zarc.pdb
+D:\Translate\EZG\code\Zarc\Zarc\obj\Debug\Zarc.csprojResolveAssemblyReference.cache
+D:\Translate\EZG\code\Zarc\Zarc\obj\Debug\Zarc.exe
+D:\Translate\EZG\code\Zarc\Zarc\obj\Debug\Zarc.pdb

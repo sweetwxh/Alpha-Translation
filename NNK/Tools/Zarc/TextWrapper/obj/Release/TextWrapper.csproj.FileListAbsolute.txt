@@ -1,0 +1,4 @@
+D:\Translate\EZG\code\Zarc\TextWrapper\bin\Release\TextWrapper.exe
+D:\Translate\EZG\code\Zarc\TextWrapper\bin\Release\TextWrapper.pdb
+D:\Translate\EZG\code\Zarc\TextWrapper\obj\Release\TextWrapper.exe
+D:\Translate\EZG\code\Zarc\TextWrapper\obj\Release\TextWrapper.pdb

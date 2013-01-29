@@ -1,0 +1,9 @@
+C:\translate\code\Zarc\FontProcessor\obj\Release\FontProcessor.csprojResolveAssemblyReference.cache
+C:\translate\code\Zarc\FontProcessor\bin\Release\FontProcessor.exe
+C:\translate\code\Zarc\FontProcessor\bin\Release\FontProcessor.pdb
+C:\translate\code\Zarc\FontProcessor\obj\Release\FontProcessor.exe
+C:\translate\code\Zarc\FontProcessor\obj\Release\FontProcessor.pdb
+D:\Translate\EZG\code\Zarc\FontProcessor\bin\Release\FontProcessor.exe
+D:\Translate\EZG\code\Zarc\FontProcessor\bin\Release\FontProcessor.pdb
+D:\Translate\EZG\code\Zarc\FontProcessor\obj\Release\FontProcessor.exe
+D:\Translate\EZG\code\Zarc\FontProcessor\obj\Release\FontProcessor.pdb

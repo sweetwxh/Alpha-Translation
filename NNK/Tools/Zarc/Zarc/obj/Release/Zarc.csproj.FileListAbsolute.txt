@@ -1,0 +1,11 @@
+D:\Translate\EZG\code\Zarc\Zarc\bin\Release\Zarc.exe
+D:\Translate\EZG\code\Zarc\Zarc\bin\Release\Zarc.pdb
+D:\Translate\EZG\code\Zarc\Zarc\obj\Release\Zarc.exe
+D:\Translate\EZG\code\Zarc\Zarc\obj\Release\Zarc.pdb
+C:\translate\code\Zarc\Zarc\obj\Release\Zarc.exe
+C:\translate\code\Zarc\Zarc\obj\Release\Zarc.pdb
+C:\translate\code\Zarc\Zarc\bin\Release\Zarc.exe
+C:\translate\code\Zarc\Zarc\bin\Release\Zarc.pdb
+C:\translate\code\Zarc\Zarc\obj\Release\Zarc.csprojResolveAssemblyReference.cache
+C:\translate\code\Zarc\Zarc\bin\Release\Zarc.exe.CodeAnalysisLog.xml
+C:\translate\code\Zarc\Zarc\bin\Release\Zarc.exe.lastcodeanalysissucceeded

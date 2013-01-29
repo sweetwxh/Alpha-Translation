@@ -1,0 +1,4 @@
+D:\Translate\EZG\code\Zarc\FileFilter\bin\Release\FileFilter.exe
+D:\Translate\EZG\code\Zarc\FileFilter\bin\Release\FileFilter.pdb
+D:\Translate\EZG\code\Zarc\FileFilter\obj\Release\FileFilter.exe
+D:\Translate\EZG\code\Zarc\FileFilter\obj\Release\FileFilter.pdb

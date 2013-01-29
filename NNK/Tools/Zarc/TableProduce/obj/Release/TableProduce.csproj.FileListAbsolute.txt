@@ -1,0 +1,5 @@
+D:\Translate\EZG\code\Zarc\TableProduce\bin\Release\TableProduce.exe
+D:\Translate\EZG\code\Zarc\TableProduce\bin\Release\TableProduce.pdb
+D:\Translate\EZG\code\Zarc\TableProduce\obj\Release\TableProduce.csprojResolveAssemblyReference.cache
+D:\Translate\EZG\code\Zarc\TableProduce\obj\Release\TableProduce.exe
+D:\Translate\EZG\code\Zarc\TableProduce\obj\Release\TableProduce.pdb
