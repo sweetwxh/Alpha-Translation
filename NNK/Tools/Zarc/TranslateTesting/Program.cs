@@ -18,8 +18,18 @@ namespace TranslateTesting
             //    string output = s[i].ToString() + s[i + 1].ToString();
             //    Console.Write("0x{0},", output);
             //}
-            byte[] d = new byte[] { 0xe9,0xbc,0xbb };
-            Console.WriteLine(Encoding.UTF8.GetString(d));
+            string s = "奧巴還快點兒";
+            foreach (char c in s)
+            {
+                byte[] b = Encoding.UTF8.GetBytes(c.ToString());
+                byte[] n = new byte[4];
+                Array.Copy(b, 0, n, 1, 3);
+                int i = DataConverter.BigEndian.GetInt32(n, 0);
+
+                b = Encoding.GetEncoding(932).GetBytes(c.ToString());
+                ushort jis = DataConverter.BigEndian.GetUInt16(b, 0);
+                Console.WriteLine("{0},{1},{2}", jis, i,c);
+            }
 
             Console.ReadKey();
         }

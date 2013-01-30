@@ -3,8 +3,3 @@ D:\Translate\EZG\code\Zarc\FontTester\bin\Release\FontTester.pdb
 D:\Translate\EZG\code\Zarc\FontTester\obj\Release\FontTester.csprojResolveAssemblyReference.cache
 D:\Translate\EZG\code\Zarc\FontTester\obj\Release\FontTester.exe
 D:\Translate\EZG\code\Zarc\FontTester\obj\Release\FontTester.pdb
-C:\translate\NNK\code\Zarc\FontTester\obj\Release\FontTester.exe
-C:\translate\NNK\code\Zarc\FontTester\obj\Release\FontTester.pdb
-C:\translate\NNK\code\Zarc\FontTester\bin\Release\FontTester.exe
-C:\translate\NNK\code\Zarc\FontTester\bin\Release\FontTester.pdb
-C:\translate\NNK\code\Zarc\FontTester\obj\Release\FontTester.csprojResolveAssemblyReference.cache

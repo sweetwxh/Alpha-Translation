@@ -2,5 +2,3 @@ D:\Translate\EZG\code\Zarc\FontCreator\bin\Release\FontCreator.exe
 D:\Translate\EZG\code\Zarc\FontCreator\bin\Release\FontCreator.pdb
 D:\Translate\EZG\code\Zarc\FontCreator\obj\Release\FontCreator.exe
 D:\Translate\EZG\code\Zarc\FontCreator\obj\Release\FontCreator.pdb
-C:\translate\NNK\code\Zarc\FontCreator\obj\Release\FontCreator.exe
-C:\translate\NNK\code\Zarc\FontCreator\obj\Release\FontCreator.pdb

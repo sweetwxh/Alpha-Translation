@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontCreator", "FontCreator\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontTester", "FontTester\FontTester.csproj", "{047939FA-B4C7-44FB-90AA-AC008B29964F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextToHex", "TextToHex\TextToHex.csproj", "{803DF239-FCF7-4582-A28F-73DB0DA22ED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{047939FA-B4C7-44FB-90AA-AC008B29964F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{047939FA-B4C7-44FB-90AA-AC008B29964F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{047939FA-B4C7-44FB-90AA-AC008B29964F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
