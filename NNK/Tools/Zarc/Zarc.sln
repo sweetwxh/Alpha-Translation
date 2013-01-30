@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontTester", "FontTester\Fo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextToHex", "TextToHex\TextToHex.csproj", "{803DF239-FCF7-4582-A28F-73DB0DA22ED5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPKProcessor", "HPKProcessor\HPKProcessor.csproj", "{DB712DA3-AF5B-4587-A48A-D788F6FDE298}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{803DF239-FCF7-4582-A28F-73DB0DA22ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
