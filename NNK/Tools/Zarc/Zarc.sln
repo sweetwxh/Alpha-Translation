@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextToHex", "TextToHex\Text
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPKProcessor", "HPKProcessor\HPKProcessor.csproj", "{DB712DA3-AF5B-4587-A48A-D788F6FDE298}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCount", "WordCount\WordCount.csproj", "{6078FAE7-CD68-4FC4-850D-5B0A39A69206}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB712DA3-AF5B-4587-A48A-D788F6FDE298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
