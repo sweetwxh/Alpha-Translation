@@ -35,7 +35,7 @@ namespace CtxrProcessor
                         byte[] recordData = binReader.ReadBytes(0xc);
                         File.WriteAllBytes(rcdPath, recordData);
 
-                        byte[] imgData = binReader.ReadBytes(0x10);
+                        byte[] imgData = binReader.ReadBytes(0x14);
                         fileData.Write(imgData, 0, imgData.Length);
 
                         byte[] zeroData = new byte[0x80 - fileData.Length];
@@ -62,7 +62,7 @@ namespace CtxrProcessor
             if (file.DirectoryName != null)
             {
                 rcdPath = Path.Combine(file.DirectoryName, baseName + ".dat");
-                cxtrPath = Path.Combine(file.DirectoryName, baseName + ".cxtr");
+                cxtrPath = Path.Combine(file.DirectoryName, baseName + ".ctxr");
             }
             Console.WriteLine("正在处理:{0}", file.FullName);
             using (FileStream fileReader = file.OpenRead())
@@ -79,7 +79,7 @@ namespace CtxrProcessor
                         byte[] recordData = File.ReadAllBytes(rcdPath);
                         fileData.Write(recordData, 0, recordData.Length);
 
-                        byte[] imgData = binReader.ReadBytes(0x10);
+                        byte[] imgData = binReader.ReadBytes(0x14);
                         fileData.Write(imgData, 0, imgData.Length);
 
 
