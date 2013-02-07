@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CtxrProcessor", "CtxrProcessor\CtxrProcessor.csproj", "{267710CD-81CB-4E49-A209-2931AEE9EF09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OriginTranslationFiles", "OriginTranslationFiles\OriginTranslationFiles.csproj", "{DDE1D34A-126F-4098-990B-ACCC3A36F833}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileExtract", "FileExtract\FileExtract.csproj", "{406B8C71-6885-4ABF-BAE4-66FC51FA8B0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{267710CD-81CB-4E49-A209-2931AEE9EF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{267710CD-81CB-4E49-A209-2931AEE9EF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{267710CD-81CB-4E49-A209-2931AEE9EF09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDE1D34A-126F-4098-990B-ACCC3A36F833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE1D34A-126F-4098-990B-ACCC3A36F833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE1D34A-126F-4098-990B-ACCC3A36F833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE1D34A-126F-4098-990B-ACCC3A36F833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{406B8C71-6885-4ABF-BAE4-66FC51FA8B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{406B8C71-6885-4ABF-BAE4-66FC51FA8B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{406B8C71-6885-4ABF-BAE4-66FC51FA8B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{406B8C71-6885-4ABF-BAE4-66FC51FA8B0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
