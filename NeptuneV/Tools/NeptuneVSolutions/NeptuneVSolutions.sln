@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeptuneVSolutions", "Neptun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OriginFontCreator", "OriginFontCreator\OriginFontCreator.csproj", "{849AE767-2853-475B-A363-6E03C39D427D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextProcessor", "TextProcessor\TextProcessor.csproj", "{FCAE4A57-893C-4E7F-9E16-49B6B33A14B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{849AE767-2853-475B-A363-6E03C39D427D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{849AE767-2853-475B-A363-6E03C39D427D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{849AE767-2853-475B-A363-6E03C39D427D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCAE4A57-893C-4E7F-9E16-49B6B33A14B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCAE4A57-893C-4E7F-9E16-49B6B33A14B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCAE4A57-893C-4E7F-9E16-49B6B33A14B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCAE4A57-893C-4E7F-9E16-49B6B33A14B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
