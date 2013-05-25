@@ -1,0 +1,1880 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CSharpUtils</name>
+    </assembly>
+    <members>
+        <member name="T:CSharpUtils.ArrayEqualityComparer`1">
+            <summary>
+            http://stackoverflow.com/questions/1440392/use-byte-as-key-in-dictionary
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.CreateMask(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.Insert(System.UInt32@,System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <param name="Offset"> </param>
+            <param name="Count"> </param>
+            <param name="ValueToInsert"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.Insert(System.UInt32,System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="InitialValue"> </param>
+            <param name="Offset"> </param>
+            <param name="Count"> </param>
+            <param name="ValueToInsert"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.Extract(System.UInt32,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="InitialValue"> </param>
+            <param name="Offset"> </param>
+            <param name="Count"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.ExtractScaled(System.UInt32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="InitialValue"> </param>
+            <param name="Offset"> </param>
+            <param name="Count"> </param>
+            <param name="Scale"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.ExtractBool(System.UInt32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="InitialValue"> </param>
+            <param name="Offset"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.ExtractSigned(System.UInt32,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="InitialValue"> </param>
+            <param name="Offset"> </param>
+            <param name="Count"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.ExtractUnsignedScaled(System.UInt32,System.Int32,System.Int32,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"> </param>
+            <param name="Offset"> </param>
+            <param name="Count"> </param>
+            <param name="Scale"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.BitUtils.XorBytes(System.Byte[][])">
+            <summary>
+            
+            </summary>
+            <param name="Arrays"></param>
+            <returns></returns>
+        </member>
+        <member name="F:CSharpUtils.Containers.RedBlackTree.RedBlackTreeWithStats`1.CappedToNumberOfElements">
+            <summary>
+            Max number of elements that the collection will have.
+            If inserted more, it will remove the tail of the collection.
+            If this value is -1, that means that the collection is not capped.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Containers.RedBlackTree.RedBlackTreeWithStats`1.Remove(`0)">
+            <summary>
+            Removes an element from the tree.
+            </summary>
+            <param name="Item"></param>
+            <returns>Returns if an element was removed or not</returns>
+        </member>
+        <member name="M:CSharpUtils.Containers.RedBlackTree.RedBlackTreeWithStats`1.Range.Slice">
+            <summary>
+            Slice is immutable, so don't need to clone.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CSharpUtils.Diff">
+            <summary>
+            This Class implements the Difference Algorithm published in
+            "An O(ND) Difference Algorithm and its Variations" by Eugene Myers
+            Algorithmica Vol. 1 No. 2, 1986, p 251.  
+            
+            There are many C, Java, Lisp implementations public available but they all seem to come
+            from the same source (diffutils) that is under the (unfree) GNU public License
+            and cannot be reused as a sourcecode for a commercial application.
+            There are very old C implementations that use other (worse) algorithms.
+            Microsoft also published sourcecode of a diff-tool (windiff) that uses some tree data.
+            Also, a direct transfer from a C source to C# is not easy because there is a lot of pointer
+            arithmetic in the typical C solutions and i need a managed solution.
+            These are the reasons why I implemented the original published algorithm from the scratch and
+            make it avaliable without the GNU license limitations.
+            I do not need a high performance diff tool because it is used only sometimes.
+            I will do some performace tweaking when needed.
+            
+            The algorithm itself is comparing 2 arrays of numbers so when comparing 2 text documents
+            each line is converted into a (hash) number. See DiffText(). 
+            
+            Some chages to the original algorithm:
+            The original algorithm was described using a recursive approach and comparing zero indexed arrays.
+            Extracting sub-arrays and rejoining them is very performance and memory intensive so the same
+            (readonly) data arrays are passed arround together with their lower and upper bounds.
+            This circumstance makes the LCS and SMS functions more complicate.
+            I added some code to the LCS function to get a fast response on sub-arrays that are identical,
+            completely deleted or inserted.
+            
+            The result from a comparisation is stored in 2 arrays that flag for modified (deleted or inserted)
+            lines in the 2 data arrays. These bits are then analysed to produce a array of Item objects.
+            
+            Further possible optimizations:
+            (first rule: don't do it; second: don't do it yet)
+            The arrays DataA and DataB are passed as parameters, but are never changed after the creation
+            so they can be members of the class to avoid the paramter overhead.
+            In SMS is a lot of boundary arithmetic in the for-D and for-k loops that can be done by increment
+            and decrement of local variables.
+            The DownVector and UpVector arrays are alywas created and destroyed each time the SMS gets called.
+            It is possible to reuse tehm when transfering them to members of the class.
+            See TODO: hints.
+            
+            diff.cs: A port of the algorythm to C#
+            Copyright (c) by Matthias Hertel, http://www.mathertel.de
+            This work is licensed under a BSD style license. See http://www.mathertel.de/License.aspx
+            
+            Changes:
+            2002.09.20 There was a "hang" in some situations.
+            Now I undestand a little bit more of the SMS algorithm. 
+            There have been overlapping boxes; that where analyzed partial differently.
+            One return-point is enough.
+            A assertion was added in CreateDiffs when in debug-mode, that counts the number of equal (no modified) lines in both arrays.
+            They must be identical.
+            
+            2003.02.07 Out of bounds error in the Up/Down vector arrays in some situations.
+            The two vetors are now accessed using different offsets that are adjusted using the start k-Line. 
+            A test case is added. 
+            
+            2006.03.05 Some documentation and a direct Diff entry point.
+            
+            2006.03.08 Refactored the API to static methods on the Diff class to make usage simpler.
+            2006.03.10 using the standard Debug class for self-test now.
+                       compile with: csc /target:exe /out:diffTest.exe /d:DEBUG /d:TRACE /d:SELFTEST Diff.cs
+            2007.01.06 license agreement changed to a BSD style license.
+            2007.06.03 added the Optimize method.
+            2007.09.23 UpVector and DownVector optimization by Jan Stoklasa ().
+            2008.05.31 Adjusted the testing code that failed because of the Optimize method (not a bug in the diff algorithm).
+            2008.10.08 Fixing a test case and adding a new test case.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Diff.DiffText(System.String[],System.String[])">
+            <summary>
+            Find the difference in 2 texts, comparing by textlines.
+            </summary>
+            <param name="TextA">A-version of the text (usualy the old one)</param>
+            <param name="TextB">B-version of the text (usualy the new one)</param>
+            <returns>Returns a array of Items that describe the differences.</returns>
+        </member>
+        <member name="M:CSharpUtils.Diff.DiffText(System.String[],System.String[],System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Find the difference in 2 text documents, comparing by textlines.
+            The algorithm itself is comparing 2 arrays of numbers so when comparing 2 text documents
+            each line is converted into a (hash) number. This hash-value is computed by storing all
+            textlines into a common hashtable so i can find dublicates in there, and generating a 
+            new number each time a new textline is inserted.
+            </summary>
+            <param name="TextA">A-version of the text (usualy the old one)</param>
+            <param name="TextB">B-version of the text (usualy the new one)</param>
+            <param name="trimSpace">When set to true, all leading and trailing whitespace characters are stripped out before the comparation is done.</param>
+            <param name="ignoreSpace">When set to true, all whitespace characters are converted to a single space character before the comparation is done.</param>
+            <param name="ignoreCase">When set to true, all characters are converted to their lowercase equivivalence before the comparation is done.</param>
+            <returns>Returns a array of Items that describe the differences.</returns>
+        </member>
+        <member name="M:CSharpUtils.Diff.Optimize(CSharpUtils.DiffData)">
+            <summary>
+            If a sequence of modified lines starts with a line that contains the same content
+            as the line that appends the changes, the difference sequence is modified so that the
+            appended line and not the starting line is marked as modified.
+            This leads to more readable diff sequences when comparing text files.
+            </summary>
+            <param name="Data">A Diff data buffer containing the identified changes.</param>
+        </member>
+        <member name="M:CSharpUtils.Diff.DiffInt(System.Int32[],System.Int32[])">
+            <summary>
+            Find the difference in 2 arrays of integers.
+            </summary>
+            <param name="ArrayA">A-version of the numbers (usualy the old one)</param>
+            <param name="ArrayB">B-version of the numbers (usualy the new one)</param>
+            <returns>Returns a array of Items that describe the differences.</returns>
+        </member>
+        <member name="M:CSharpUtils.Diff.DiffCodes(System.String[],System.Collections.Hashtable,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            This function converts all textlines of the text into unique numbers for every unique textline
+            so further work can work only with simple numbers.
+            </summary>
+            <param name="Lines">the input text</param>
+            <param name="h">This extern initialized hashtable is used for storing all ever used textlines.</param>
+            <param name="trimSpace">ignore leading and trailing space characters</param>
+            <param name="ignoreSpace"></param>
+            <param name="ignoreCase"></param>
+            <returns>a array of integers.</returns>
+        </member>
+        <member name="M:CSharpUtils.Diff.SMS(CSharpUtils.DiffData,System.Int32,System.Int32,CSharpUtils.DiffData,System.Int32,System.Int32,System.Int32[],System.Int32[])">
+            <summary>
+            This is the algorithm to find the Shortest Middle Snake (SMS).
+            </summary>
+            <param name="DataA">sequence A</param>
+            <param name="LowerA">lower bound of the actual range in DataA</param>
+            <param name="UpperA">upper bound of the actual range in DataA (exclusive)</param>
+            <param name="DataB">sequence B</param>
+            <param name="LowerB">lower bound of the actual range in DataB</param>
+            <param name="UpperB">upper bound of the actual range in DataB (exclusive)</param>
+            <param name="DownVector">a vector for the (0,0) to (x,y) search. Passed as a parameter for speed reasons.</param>
+            <param name="UpVector">a vector for the (u,v) to (N,M) search. Passed as a parameter for speed reasons.</param>
+            <returns>a MiddleSnakeData record containing x,y and u,v</returns>
+        </member>
+        <member name="M:CSharpUtils.Diff.LCS(CSharpUtils.DiffData,System.Int32,System.Int32,CSharpUtils.DiffData,System.Int32,System.Int32,System.Int32[],System.Int32[])">
+            <summary>
+            This is the divide-and-conquer implementation of the longes common-subsequence (LCS) 
+            algorithm.
+            The published algorithm passes recursively parts of the A and B sequences.
+            To avoid copying these arrays the lower and upper bounds are passed while the sequences stay constant.
+            </summary>
+            <param name="DataA">sequence A</param>
+            <param name="LowerA">lower bound of the actual range in DataA</param>
+            <param name="UpperA">upper bound of the actual range in DataA (exclusive)</param>
+            <param name="DataB">sequence B</param>
+            <param name="LowerB">lower bound of the actual range in DataB</param>
+            <param name="UpperB">upper bound of the actual range in DataB (exclusive)</param>
+            <param name="DownVector">a vector for the (0,0) to (x,y) search. Passed as a parameter for speed reasons.</param>
+            <param name="UpVector">a vector for the (u,v) to (N,M) search. Passed as a parameter for speed reasons.</param>
+        </member>
+        <member name="M:CSharpUtils.Diff.CreateDiffs(CSharpUtils.DiffData,CSharpUtils.DiffData)">
+            <summary>
+            Scan the tables of which lines are inserted and deleted,
+            producing an edit script in forward order.  
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Diff.Item">
+            <summary>details of one difference.</summary>
+        </member>
+        <member name="F:CSharpUtils.Diff.Item.StartA">
+            <summary>Start Line number in Data A.</summary>
+        </member>
+        <member name="F:CSharpUtils.Diff.Item.StartB">
+            <summary>Start Line number in Data B.</summary>
+        </member>
+        <member name="F:CSharpUtils.Diff.Item.deletedA">
+            <summary>Number of changes in Data A.</summary>
+        </member>
+        <member name="F:CSharpUtils.Diff.Item.insertedB">
+            <summary>Number of changes in Data B.</summary>
+        </member>
+        <member name="T:CSharpUtils.Diff.SMSRD">
+            <summary>
+            Shortest Middle Snake Return Data
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.DiffData">
+            <summary>Data on one input file being compared.  
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.DiffData.Length">
+            <summary>Number of elements (lines).</summary>
+        </member>
+        <member name="F:CSharpUtils.DiffData.data">
+            <summary>Buffer of numbers that will be compared.</summary>
+        </member>
+        <member name="F:CSharpUtils.DiffData.modified">
+            <summary>
+            Array of booleans that flag for modified data.
+            This is the result of the diff.
+            This means deletedA in the first Data or inserted in the second Data.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.DiffData.#ctor(System.Int32[])">
+            <summary>
+            Initialize the Diff-Data buffer.
+            </summary>
+            <param name="initData">reference to the buffer</param>
+        </member>
+        <member name="T:CSharpUtils.BitReader">
+            From DeflateLib
+            http://www.koders.com/csharp/fid4D158EE81EB65FC84BC0EE0216F6F1F62FC95BD1.aspx?s=mdef%3Acompute
+            
+            <summary>
+            Helper class for writing bit values, bit blocks in LSB and MSB bits formats.
+            Doesn't read bytes ahead -- reads next byte if necessary.
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.BitWriter">
+            From DeflateLib
+            http://www.koders.com/csharp/fid4D158EE81EB65FC84BC0EE0216F6F1F62FC95BD1.aspx?s=mdef%3Acompute
+            
+            <summary>
+            Helper class for writing bit values, bit blocks in LSB and MSB bits formats.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Factory.Factory.New``1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Factory.MockeableFactory.MockType(System.Type,System.Type)">
+            <summary>
+            
+            </summary>
+            <param name="TypeToMock"></param>
+            <param name="MockedType"></param>
+        </member>
+        <member name="M:CSharpUtils.Factory.MockeableFactory.New``1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntries">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.ShowHelp">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.BindDefaultMethod(CSharpUtils.Getopt.GetoptCommandLineProgram.CommandDefaultAttribute,System.Reflection.MethodInfo)">
+            <summary>
+            
+            </summary>
+            <param name="SwitchDefaultAttribute"></param>
+            <param name="Method"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.BindMethod(CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry)">
+            <summary>
+            
+            </summary>
+            <param name="CommandEntry"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.BindField(CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry)">
+            <summary>
+            
+            </summary>
+            <param name="CommandEntry"></param>
+        </member>
+        <member name="F:CSharpUtils.Getopt.GetoptCommandLineProgram.Getopt">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.Run(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.Aliases">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.Values">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.Examples">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.MemberInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.MethodInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.PropertyInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandEntry.FieldInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandAttribute.#ctor(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="Aliases"></param>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandAttribute.Aliases">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram.ValuesAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.ValuesAttribute.#ctor(System.Object[])">
+            <summary>
+            
+            </summary>
+            <param name="Values"></param>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.ValuesAttribute.Values">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram.DescriptionAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.DescriptionAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Description"></param>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.DescriptionAttribute.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram.ExampleAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.ExampleAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Example"></param>
+        </member>
+        <member name="P:CSharpUtils.Getopt.GetoptCommandLineProgram.ExampleAttribute.Example">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandDefaultAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.GetoptCommandLineProgram.CommandDefaultAttribute.#ctor(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="Switches"></param>
+        </member>
+        <member name="F:CSharpUtils.Getopt.Getopt.Items">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Getopt.Getopt.Actions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Getopt.Getopt.DefaultAction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Getopt.Getopt.SopportedSwitches">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.#ctor(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="_Items"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.DequeueNext">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddDefaultRule(System.Action)">
+            <summary>
+            
+            </summary>
+            <param name="Action"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule(System.String,System.Boolean@)">
+            <summary>
+            
+            </summary>
+            <param name="Name"></param>
+            <param name="Value"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule(System.String,System.Int32@)">
+            <summary>
+            
+            </summary>
+            <param name="Name"></param>
+            <param name="Value"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule``1(System.String,System.Action{``0})">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Name"></param>
+            <param name="Action"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule(System.String,System.Action)">
+            <summary>
+            
+            </summary>
+            <param name="Name"></param>
+            <param name="Action"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule(System.String[],System.Action)">
+            <summary>
+            
+            </summary>
+            <param name="Names"></param>
+            <param name="Action"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule(System.Action{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="Action"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.CheckArgument``1(System.String,System.Func{``0})">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Name"></param>
+            <param name="Action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.AddRule``1(System.String[],System.Action{``0})">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Names"></param>
+            <param name="Action"></param>
+        </member>
+        <member name="M:CSharpUtils.Getopt.Getopt.Process">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Getopt.Getopt.HasMore">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.LanguageUtils.Swap``1(``0@,``0@)">
+            <summary>
+            Swaps the value of two references.
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Left"></param>
+            <param name="Right"></param>
+        </member>
+        <member name="M:CSharpUtils.LanguageUtils.Transfer``1(``0@,``0@,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Left"></param>
+            <param name="Right"></param>
+            <param name="CopyToLeft"></param>
+        </member>
+        <member name="M:CSharpUtils.LanguageUtils.LocalSet``1(``0@,``0,System.Action)">
+            <summary>
+            Changes the value of a reference just while the execution of the LocalScope delegate.
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Variable"></param>
+            <param name="LocalValue"></param>
+            <param name="LocalScope"></param>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Abs(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Cast(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Floor(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Ceil(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Round(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Rint(System.Single)">
+            <summary>
+            Rounds x to the nearest integer value, using the current rounding mode.
+            If the return value is not equal to x, the FE_INEXACT exception is raised.
+            nearbyint performs the same operation, but does not set the FE_INEXACT exception.
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.ReinterpretFloatAsUInt(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.ReinterpretUIntAsFloat(System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.ReinterpretFloatAsInt(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.ReinterpretIntAsFloat(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Cos(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Angle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Sin(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Angle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.CosV1(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="AngleV1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.SinV1(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="AngleV1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Clamp(System.Single,System.Single,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <param name="Min"></param>
+            <param name="Max"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.ClampInt(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <param name="Min"></param>
+            <param name="Max"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Sqrt(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Scalb(System.Single,System.Int32)">
+            <summary>
+            Math.scalb (12.0, 3) = 96.0
+            </summary>
+            <param name="Value"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Sign(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Min(System.Single,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Left"></param>
+            <param name="Right"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Max(System.Single,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Left"></param>
+            <param name="Right"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.IsNan(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.IsInfinity(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.RSqrt(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Asin(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.AsinV1(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Vsat0(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Vsat1(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Log2(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathFloat.Exp2(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.PointerUtils.Memcmp(System.Byte*,System.Byte*,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Left"></param>
+            <param name="Right"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.PointerUtils.FastHash(System.Byte*,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Ptr"></param>
+            <param name="Len"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CSharpUtils.ProduceConsumeBuffer`1">
+            <summary>
+             @TODO Have to improve performance without allocating memory all the time. Maybe a RingBuffer or so.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:CSharpUtils.EnumerableComparer`1">
+            <summary>
+            Compares two sequences.
+            </summary>
+            <typeparam name="T">Type of item in the sequences.</typeparam>
+            <remarks>
+            Compares elements from the two input sequences in turn. If we
+            run out of list before finding unequal elements, then the shorter
+            list is deemed to be the lesser list.
+            </remarks>
+            <see cref="!:http://www.interact-sw.co.uk/iangblog/2007/12/13/natural-sorting"/>
+            <see cref="!:http://opensource.org/licenses/mit-license.php"/>
+        </member>
+        <member name="M:CSharpUtils.EnumerableComparer`1.#ctor">
+            <summary>
+            Create a sequence comparer using the default comparer for T.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.EnumerableComparer`1.#ctor(System.Collections.Generic.IComparer{`0})">
+            <summary>
+            Create a sequence comparer, using the specified item comparer
+            for T.
+            </summary>
+            <param name="comparer">Comparer for comparing each pair of
+            items from the sequences.</param>
+        </member>
+        <member name="F:CSharpUtils.EnumerableComparer`1.comp">
+            <summary>
+            Object used for comparing each element.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.EnumerableComparer`1.Compare(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Compare two sequences of T.
+            </summary>
+            <param name="x">First sequence.</param>
+            <param name="y">Second sequence.</param>
+        </member>
+        <member name="M:CSharpUtils.FileUtils.CopyTree(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="SourcePath"></param>
+            <param name="DestinationPath"></param>
+            <see cref="!:http://stackoverflow.com/questions/58744/best-way-to-copy-the-entire-contents-of-a-directory-in-c"/>
+        </member>
+        <member name="T:CSharpUtils.LazyHolder`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <see cref="T:System.Lazy`1"/>
+        </member>
+        <member name="M:LinqExExtensions.CreateDictionary``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            See ToDictionary.
+            </summary>
+            <typeparam name="TValue"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="ListItems"></param>
+            <param name="KeySelector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathUtils.ByteSwap(System.UInt16)">
+            <summary>
+            Useful for converting LittleEndian to BigEndian and viceversa.
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathUtils.ByteSwap(System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathUtils.ByteSwap(System.UInt64)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathUtils.ByteSwap(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.MathUtils.Align(System.Int64,System.Int64)">
+            <summary>
+            Returns the upper minimum value that will be divisible by AlignValue.
+            </summary>
+            <example>
+            Align(0x1200, 0x800) == 0x1800
+            </example>
+            <param name="Value"></param>
+            <param name="AlignValue"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CSharpUtils.Streams.MapStream">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Map(System.Int64,System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Offset"></param>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.WriteSegmentsToStream(System.IO.Stream)">
+            <summary>
+            Function that writtes all the mappings into another stream.
+            Useful for patching a file or memory.
+            </summary>
+            <param name="TargetStream">Stream to write the mapped contents to</param>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Flush">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream._PrepareCurrentStream">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.GetAvailableBytesOnCurrentStream">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream._Transfer(System.Byte[],System.Int64,System.Int64,System.Func{System.Byte[],System.Int64,System.Int64,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="Buffer"></param>
+            <param name="Offset"></param>
+            <param name="Count"></param>
+            <param name="Method"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Buffer"></param>
+            <param name="Offset"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Buffer"></param>
+            <param name="Offset"></param>
+            <param name="Count"></param>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            
+            </summary>
+            <param name="offset"></param>
+            <param name="origin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.SetLength(System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Serialize(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="TargetStream"></param>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.Unserialize(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="TargetStream"></param>
+            <returns></returns>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.StreamEntries">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.CanRead">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.CanSeek">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.CanWrite">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.Length">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.Position">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Streams.MapStream.StreamEntry">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Streams.MapStream.StreamEntry.Position">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Streams.MapStream.StreamEntry.Stream">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.StreamEntry.#ctor(System.Int64,System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Position"></param>
+            <param name="Stream"></param>
+        </member>
+        <member name="M:CSharpUtils.Streams.MapStream.StreamEntry.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:CSharpUtils.Streams.MapStream.StreamEntry.Length">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:CSharpUtils.Streams.SliceStream">
+            <summary>
+            Class to create a SliceStream that will slice a base Stream with its own cursor.
+            </summary>
+            <example>
+            var File = File.OpenRead("file.txt");
+            var SliceFile = nSliceStream.CreateWithBounds(File, 10, 20);
+            </example>
+        </member>
+        <member name="F:CSharpUtils.Streams.SliceStream.ThisPosition">
+            <summary>
+            Cursor for this SliceStream.
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Streams.SliceStream.ThisStart">
+            <summary>
+            Start offset of this SliceStream relative to ParentStream.
+            </summary>
+        </member>
+        <member name="F:CSharpUtils.Streams.SliceStream.ThisLength">
+            <summary>
+            Length of this SliceStream.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.CreateWithLength(System.IO.Stream,System.Int64,System.Int64,System.Nullable{System.Boolean})">
+            <summary>
+            Creates a SliceStream specifying a start offset and a length.
+            </summary>
+            <param name="BaseStream">Base Stream</param>
+            <param name="ThisStart">Starting Offset</param>
+            <param name="ThisLength">Length of the Slice</param>
+            <param name="CanWrite">Determines if the Stream will be writtable.</param>
+            <returns>A SliceStream</returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.CreateWithBounds(System.IO.Stream,System.Int64,System.Int64,System.Nullable{System.Boolean})">
+            <summary>
+            Creates a SliceStream specifying a start offset and a end offset.
+            </summary>
+            <param name="BaseStream">Parent Stream</param>
+            <param name="ThisStart">Starting Offset</param>
+            <param name="ThisLength">Length of the Slice</param>
+            <param name="CanWrite">Determines if the Stream will be writtable.</param>
+            <returns>A SliceStream</returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.#ctor(System.IO.Stream,System.Int64,System.Int64,System.Nullable{System.Boolean},System.Boolean)">
+            <summary>
+            Creates a SliceStream specifying a start offset and a length.
+            
+            Please use CreateWithLength or CreateWithBounds to initialite the object.
+            </summary>
+            <param name="BaseStream">Base Stream</param>
+            <param name="ThisStart">Starting Offset</param>
+            <param name="ThisLength">Length of the Slice</param>
+            <param name="CanWrite">Determines if the Stream will be writtable.</param>
+            <returns>A SliceStream</returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Seeks the SliceStream without altering the original Stream.
+            </summary>
+            <param name="offset">Offset to seek</param>
+            <param name="origin">Origin for the seeking</param>
+            <returns>Absolute offset after the operation</returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Read a chunk from this SliceStream and move its cursor after that chunk.
+            Only will be able to read inside the bounds of this Slice.
+            It won't change the ParentStream cursor.
+            </summary>
+            <param name="buffer">ByteArray to write to</param>
+            <param name="offset">Offset of the ByteArray to write to</param>
+            <param name="count">Number of bytes to read</param>
+            <returns>Number of bytes readed</returns>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes a chunk from this SliceStream and move its cursor after that chunk.
+            Only will be able to write inside the bounds of this Slice.
+            It won't change the ParentStream cursor.
+            </summary>
+            <param name="buffer">ByteArray to read from</param>
+            <param name="offset">Offset of the ByteArray to read from</param>
+            <param name="count">Number of bytes to write</param>
+        </member>
+        <member name="M:CSharpUtils.Streams.SliceStream.SetLength(System.Int64)">
+            <summary>
+            Not implemented.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="P:CSharpUtils.Streams.SliceStream.SliceLow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.SliceStream.SliceHigh">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.SliceStream.Length">
+            <summary>
+            Gets the length of the SliceStream.
+            </summary>
+        </member>
+        <member name="P:CSharpUtils.Streams.SliceStream.Position">
+            <summary>
+            Gets or sets the current cursor for this SliceStream.
+            </summary>
+        </member>
+        <member name="M:StreamExtensions.Eof(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.PreservePositionAndLock``1(``0,System.Int64,System.Action)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TStream"></typeparam>
+            <param name="Stream"></param>
+            <param name="Position"></param>
+            <param name="Callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.PreservePositionAndLock``1(``0,System.Action)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TStream"></typeparam>
+            <param name="Stream"></param>
+            <param name="Callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.PreservePositionAndLock``1(``0,System.Action{System.IO.Stream})">
+            <summary>
+            
+            </summary>
+            <typeparam name="TStream"></typeparam>
+            <param name="Stream"></param>
+            <param name="Callback"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.Available(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadChunk(System.IO.Stream,System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Start"></param>
+            <param name="Length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadUntil(System.IO.Stream,System.Byte,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ExpectedByte"></param>
+            <param name="IncludeExpectedByte"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadUntilString(System.IO.Stream,System.Byte,System.Text.Encoding,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ExpectedByte"></param>
+            <param name="Encoding"></param>
+            <param name="IncludeExpectedByte"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadAllContentsAsString(System.IO.Stream,System.Text.Encoding,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Encoding"></param>
+            <param name="FromStart"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadAll(System.IO.Stream,System.Boolean,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="FromStart"></param>
+            <param name="Dispose"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStream(System.IO.Stream,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ToRead"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadBytes(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ToRead"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadBytesUpTo(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ToReadAsMax"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteBytes(System.IO.Stream,System.Byte[])">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteBytes(System.IO.Stream,System.Byte,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Byte"></param>
+            <param name="RepeatCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadString(System.IO.Stream,System.Int32,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ToRead"></param>
+            <param name="Encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStringzAt(System.IO.Stream,System.Int64,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Offset"></param>
+            <param name="Encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.CountStringzBytes(System.IO.Stream,System.Int32,System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ToRead"></param>
+            <param name="AlignTo4"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStringz(System.IO.Stream,System.Int32,System.Text.Encoding,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="ToRead"></param>
+            <param name="Encoding"></param>
+            <param name="AllowEndOfStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteStringzPair(System.IO.Stream,System.String,System.String,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Value1"></param>
+            <param name="Value2"></param>
+            <param name="Encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteString(System.IO.Stream,System.String,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Value"></param>
+            <param name="Encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteStringz(System.IO.Stream,System.String,System.Int32,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Value"></param>
+            <param name="ToWrite"></param>
+            <param name="Encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteZeroBytes(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteZeroToAlign(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Align"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteZeroToOffset(System.IO.Stream,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadManagedStruct``1(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStruct``1(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStructPartially``1(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStructVectorAt``1(System.IO.Stream,System.Int64,System.UInt32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Stream"></param>
+            <param name="Offset"></param>
+            <param name="Count"></param>
+            <param name="EntrySize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStructVector``1(System.IO.Stream,``0[]@,System.UInt32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Stream"></param>
+            <param name="Vector"></param>
+            <param name="Count"></param>
+            <param name="EntrySize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStructVector``1(System.IO.Stream,System.UInt32,System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="Stream"></param>
+            <param name="Count"></param>
+            <param name="EntrySize"></param>
+            <param name="AllowReadLess"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadStructVectorUntilTheEndOfStream``1(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteStruct``1(System.IO.Stream,``0)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Stream"></param>
+            <param name="Struct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteStructVector``1(System.IO.Stream,``0[])">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Stream"></param>
+            <param name="Structs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.Align(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Align"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.Skip(System.IO.Stream,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.CopyToFast(System.IO.Stream,System.IO.Stream,System.Action{System.Int64,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="FromStream"></param>
+            <param name="ToStream"></param>
+        </member>
+        <member name="M:StreamExtensions.CopyToFast(System.IO.Stream,System.IO.Stream,System.Byte[],System.Action{System.Int64,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="FromStream"></param>
+            <param name="ToStream"></param>
+        </member>
+        <member name="M:StreamExtensions.CopyToFile(System.IO.Stream,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="FileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteStream(System.IO.Stream,System.IO.Stream,System.Action{System.Int64,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="ToStream"></param>
+            <param name="FromStream"></param>
+        </member>
+        <member name="M:StreamExtensions.SetPosition(System.IO.Stream,System.Int64)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.FillStreamWithByte(System.IO.Stream,System.Byte)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Byte"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteByteRepeated(System.IO.Stream,System.Byte,System.Int64,System.Action{System.Int64,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Byte"></param>
+            <param name="TotalCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteByteRepeatedTo(System.IO.Stream,System.Byte,System.Int64,System.Action{System.Int64,System.Int64})">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Byte"></param>
+            <param name="PositionStop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteVariableUintBit8Extends(System.IO.Stream,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteVariableUlongBit8Extends(System.IO.Stream,System.UInt64)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.WriteVariableUintBit8ExtendsArray(System.IO.Stream,System.UInt32[])">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadVariableUintBit8Extends(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadVariableUlongBit8Extends(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadVariableUintBit8ExtendsArray(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.AsByteEnumerable(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.Slice(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="BaseStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.SliceWithLength(System.IO.Stream,System.Int64,System.Int64,System.Nullable{System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="BaseStream"></param>
+            <param name="ThisStart"></param>
+            <param name="ThisLength"></param>
+            <param name="CanWrite"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.SliceWithBounds(System.IO.Stream,System.Int64,System.Int64,System.Nullable{System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="BaseStream"></param>
+            <param name="LowerBound"></param>
+            <param name="UpperBound"></param>
+            <param name="CanWrite"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.Concat(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="BaseStream"></param>
+            <param name="NextStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ConvertToStreamStructArrayWrapper``1(System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="BaseStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ConvertToStreamStructCachedArrayWrapper``1(System.IO.Stream,System.Int32)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TType"></typeparam>
+            <param name="BaseStream"></param>
+            <param name="BufferCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StreamExtensions.ReadToPointer(System.IO.Stream,System.Byte*,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Stream"></param>
+            <param name="Pointer"></param>
+            <param name="Count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StringExtensions.RegexReplace(System.String,System.String,System.Func{System.Text.RegularExpressions.GroupCollection,System.String})">
+            <summary>
+            
+            </summary>
+            <param name="String"></param>
+            <param name="RegexString"></param>
+            <param name="ActionMatch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StringExtensions.RegexIsMatch(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="String"></param>
+            <param name="RegexString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StringExtensions.RegexMatchAll(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="String"></param>
+            <param name="RegexString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:StringExtensions.RegexMatch(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="String"></param>
+            <param name="RegexString"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CSharpUtils.StructUtils">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.StructUtils.ExpectSize``1(System.Int32)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="ExpectedSize"></param>
+        </member>
+        <member name="M:CSharpUtils.StructUtils.BytesToStruct``1(System.Byte[])">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="RawData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.StructUtils.BytesToStructArray``1(System.Byte[])">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="RawData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.StructUtils.StructToBytes``1(``0)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.StructUtils.StructArrayToBytes``1(``0[])">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="DataArray"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSharpUtils.Threading.GreenThread.SwitchTo">
+            <summary>
+            Called from the caller thread.
+            This will give the control to the green thread.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Threading.GreenThread.Yield">
+            <summary>
+            Called from the green thread.
+            This will return the control to the caller thread.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.TimeSpanUtils.InfiniteLoopDetector(System.Action)">
+            <summary>
+            
+            </summary>
+            <param name="Action"></param>
+        </member>
+        <member name="T:CSharpUtils.Wildcard">
+            <summary>
+            Represents a wildcard running on the
+            <see cref="N:System.Text.RegularExpressions"/> engine.
+            </summary>
+        </member>
+        <member name="M:CSharpUtils.Wildcard.#ctor(System.String)">
+            <summary>
+            Initializes a wildcard with the given search pattern.
+            </summary>
+            <param name="pattern">The wildcard pattern to match.</param>
+        </member>
+        <member name="M:CSharpUtils.Wildcard.#ctor(System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Initializes a wildcard with the given search pattern and options.
+            </summary>
+            <param name="pattern">The wildcard pattern to match.</param>
+            <param name="options">A combination of one or more
+            <see cref="T:System.Text.RegularExpressions.RegexOptions"/>.</param>
+        </member>
+        <member name="M:CSharpUtils.Wildcard.WildcardToRegex(System.String)">
+            <summary>
+            Converts a wildcard to a regex.
+            </summary>
+            <param name="pattern">The wildcard pattern to convert.</param>
+            <returns>A regex equivalent of the given wildcard.</returns>
+        </member>
+    </members>
+</doc>
