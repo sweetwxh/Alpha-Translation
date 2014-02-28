@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zarc", "Zarc\Zarc.csproj", "{45E2880D-DC43-488F-85FC-F9D093FD9A5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontProcessor", "FontProcessor\FontProcessor.csproj", "{176CA033-881D-4E64-A611-0BCAF0ADA12F}"
@@ -22,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPKProcessor", "HPKProcessor\HPKProcessor.csproj", "{DB712DA3-AF5B-4587-A48A-D788F6FDE298}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordCount", "WordCount\WordCount.csproj", "{6078FAE7-CD68-4FC4-850D-5B0A39A69206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gvd", "Gvd\Gvd.csproj", "{ACADC0C8-3EB4-4FE1-AAAD-EE16DF429C85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +77,10 @@ Global
 		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6078FAE7-CD68-4FC4-850D-5B0A39A69206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACADC0C8-3EB4-4FE1-AAAD-EE16DF429C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACADC0C8-3EB4-4FE1-AAAD-EE16DF429C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACADC0C8-3EB4-4FE1-AAAD-EE16DF429C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACADC0C8-3EB4-4FE1-AAAD-EE16DF429C85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
