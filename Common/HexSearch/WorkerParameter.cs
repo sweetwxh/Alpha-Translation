@@ -13,5 +13,7 @@ namespace HexSearch
         public FileInfo[] Files { get; set; }
 
         public byte[] SearchData { get; set; }
+
+        public int[] Next { get; set; }
     }
 }

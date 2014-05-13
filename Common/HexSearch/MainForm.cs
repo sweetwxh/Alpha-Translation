@@ -4,6 +4,9 @@
  * 说明：网上找了很久，都没有找到一款合适的16进制搜索工具，总之都会有一些限制，对于游戏文本的搜索
  * 十分不方便，所以就自己开发了。后期会不断丰富这个小工具的功能，包括相对搜索等。
  * Copyright: alpha game localization team
+ * 
+ * 修改：2014-05-13
+ * 1.增加KMP算法来做匹配
  * ************************************/
 
 #region 引用
@@ -164,13 +167,15 @@ namespace HexSearch
         /// <param name="searchData"></param>
         private void StartSearch(FileInfo[] files, byte[] searchData)
         {
+            var next = Preprocess.Next(searchData);
             for (int i = 0; i < processorCount; i++)
             {
                 WorkerParameter param = new WorkerParameter
                     {
                         StartIndex = i,
                         Files = files,
-                        SearchData = searchData
+                        SearchData = searchData,
+                        Next = next
                     };
                 ParameterizedThreadStart pts = Worker;
                 new Thread(pts).Start(param);
@@ -185,20 +190,26 @@ namespace HexSearch
         /// <param name="searchData"></param>
         private void Worker(object param)
         {
-            WorkerParameter wp = (WorkerParameter) param;
+            WorkerParameter wp = (WorkerParameter)param;
             for (int i = wp.StartIndex; i < wp.Files.Length; i += processorCount)
             {
                 FileDataSearch searcher = new FileDataSearch();
-                long foundIndex = searcher.SearchFor(wp.Files[i], wp.SearchData);
-                if (foundIndex != -1)
+
+                long[] foundIndices = searcher.KMPSearch(wp.Files[i], wp.SearchData, wp.Next);
+                //long[] foundIndices = searcher.SearchFor(wp.Files[i], wp.SearchData);
+                if (foundIndices.Length > 0)
                 {
-                    FileResult result = new FileResult
+                    foreach (var index in foundIndices)
+                    {
+                        FileResult result = new FileResult
                         {
-                            Display = string.Format("{0}(偏移: 0x{1:X})", wp.Files[i].Name, foundIndex),
+                            Display = string.Format("{0}(偏移: 0x{1:X})", wp.Files[i].Name, index),
                             FullPath = wp.Files[i].FullName
                         };
-                    BeginInvoke(new Action(() => lbResult.Items.Add(result)));
-                    Interlocked.Increment(ref totalFound);
+
+                        BeginInvoke(new Action(() => lbResult.Items.Add(result)));
+                        Interlocked.Increment(ref totalFound);
+                    }
                 }
             }
             Interlocked.Increment(ref completeCount);

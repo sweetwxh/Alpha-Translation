@@ -50,6 +50,7 @@
     <Compile Include="EncodingItem.cs" />
     <Compile Include="FileDataSearch.cs" />
     <Compile Include="FileResult.cs" />
+    <Compile Include="KMP.cs" />
     <Compile Include="SearchUtils.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
