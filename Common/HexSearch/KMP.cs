@@ -9,32 +9,25 @@ namespace HexSearch
         {
             var result = new List<long>();
             int i = 0, k = 0;
-
-            int currentData;
-            while ((currentData = source.ReadByte()) != -1)
+            int currentData = source.ReadByte();
+            while (i < source.Length && k < pattern.Length)
             {
-                if (currentData == pattern[k])
+                if (k == -1 || currentData == pattern[k])
                 {
-                    k++;
+                    ++i;
+                    ++k;
+                    currentData = source.ReadByte();
                 }
                 else
                 {
-                    if (next[k] != -1)
-                    {
-                        k = next[k];
-                    }
-                    else
-                    {
-                        k = 0;
-                    }
+                    k = next[k];
                 }
 
                 if (k == pattern.Length)
                 {
-                    result.Add(i - (pattern.Length - 1));
+                    result.Add(i - pattern.Length);
                     k = 0;
                 }
-                ++i;
             }
             return result.ToArray();
         }
@@ -49,29 +42,24 @@ namespace HexSearch
         public static long[] Match(byte[] source, byte[] pattern, int[] next)
         {
             var result = new List<long>();
+            int i = 0;
             int k = 0;
-            for (int i = 0; i < source.Length; i++)
+            while (i < source.Length && k < pattern.Length)
             {
-                if (source[i] == pattern[k])
+                if (k == -1 || source[i] == pattern[k])
                 {
-                    k++;
+                    ++i;
+                    ++k;
                 }
                 else
                 {
-                    if (next[k] != -1)
-                    {
-                        k = next[k];
-                    }
-                    else
-                    {
-                        k = 0;
-                    }
+                    k = next[k];
                 }
 
                 if (k == pattern.Length)
                 {
                     //找到匹配了
-                    result.Add(i - (pattern.Length - 1));
+                    result.Add(i - pattern.Length);
                     k = 0;
                 }
             }
@@ -93,14 +81,23 @@ namespace HexSearch
             int j = 0, k = -1;
             while (j < pattern.Length - 1)
             {
-                if (k != -1 && pattern[k] != pattern[j])
-                    k = next[k];
-                ++j;
-                ++k;
-                if (pattern[k] == pattern[j])
-                    next[j] = next[k];
+                if (k == -1 || pattern[j] == pattern[k])
+                {
+                    ++j;
+                    ++k;
+                    if (pattern[j] != pattern[k])
+                    {
+                        next[j] = k;
+                    }
+                    else
+                    {
+                        next[j] = next[k];
+                    }
+                }
                 else
-                    next[j] = k;
+                {
+                    k = next[k];
+                }
             }
             return next;
         }
